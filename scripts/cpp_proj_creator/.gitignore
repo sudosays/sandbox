@@ -1,0 +1,37 @@
+#--------------------------#
+# Basic gitignore file     #
+# Author: Julius Stopforth #
+#--------------------------#
+
+
+#---------#
+# Folders #
+#---------#
+
+bin
+obj
+
+#------------#
+# File types #
+#------------#
+
+## C++ Specific ##
+
+*.o
+*.so
+
+## Vim ##
+
+*.swp
+
+#----------------#
+# Specific files #
+#----------------#
+
+## gcc default binary name ##
+
+a.out
+
+## Python cache ##
+
+__pycache__
