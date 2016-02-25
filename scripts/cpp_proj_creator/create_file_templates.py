@@ -26,7 +26,7 @@ project_name = input('Please enter the name of the project:\n')
 print('Attempting to create directory called ' + project_name + '.')
 
 try:
-	subprocess.run(['mkdir', projectname])
+	subprocess.call(['mkdir', project_name])
 	print('Success')
 except SubprocessError:
 	print('Failed')
@@ -43,9 +43,6 @@ creation_date = format_date(date.today())
 base_dict = {'project_name': project_name, 'author': default_author, 'date': creation_date}
 
 makefile_dict = {}
-
-print(template_dict)
-
 
 temp_file = open( 'file.template' )
 
