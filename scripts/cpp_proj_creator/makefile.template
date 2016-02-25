@@ -1,0 +1,38 @@
+# Basic C++ makefile
+# Author: $author
+# Date: $date
+
+
+## Variable declaration ##
+CC=g++
+CFLAGS= -Wall -c
+LFLAGS= -std=c++11 -I $$(LIBDIR) $$(LIBFLAGS) 
+LIBFLAGS= -L $$(LIBDIR) -lbrain_dead_factorial
+TARGET= $project_name
+OBJECTS= $objects
+SOURCES= $sources
+
+LIBDIR= ./factorial_library/
+
+
+## Build the final executable binary
+$$(TARGET): $$(OBJECTS)
+	$$(CC) -o $$(TARGET) $$(OBJECTS) $$(LFLAGS)
+
+## Build the object files if not yet present
+$$(OBJECTS): pre
+	$$(CC) $$(CFLAGS) $$(SOURCES) $$(LFLAGS)
+
+## Tell make that pre is not a file that needs to be created
+.PHONY: pre
+
+run:
+	export LD_LIBRARY_PATH=./factorial_library/ && ./driver
+
+## Run these commands before compiling the source code ##
+pre:
+#	$$(MAKE) -C $$(LIBDIR)
+
+## Remove all object and shared object files in the current directory
+clean:
+	$$(RM) *.o *.so
