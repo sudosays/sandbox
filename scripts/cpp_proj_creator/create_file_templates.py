@@ -1,10 +1,9 @@
-# Python script to create template files
+# Python script to create skeleton C++ project
 # Julius Stopforth
 # 18.02.2016
 
-
 # add os.exec for git repo initialisation
-# use os.exec for dir creation etc
+# add subprocess to change local git user info to preferred info
 
 import subprocess
 from string import Template
@@ -18,36 +17,46 @@ def format_date(a_date):
 	datestr += str(a_date.year).zfill(4)
 	return datestr
 
-## Ask the user for the name of the project ##
-project_name = input('Please enter the name of the project:\n')
+def create_dir(dirname):
+	try:
+		subprocess.call(['mkdir', project_name])
+	except SubprocessError:
+		print('Failed')
+		raise
+		
+def git_setup():
+	subprocess.call(['git', 'init'])
 
 
-## Create the project directory ##
-print('Attempting to create directory called ' + project_name + '.')
+if __name__ == "__main__":
 
-try:
-	subprocess.call(['mkdir', project_name])
-	print('Success')
-except SubprocessError:
-	print('Failed')
-	raise
-	
-	
-	
+	## Ask the user for the name of the project ##
+	project_name = input('Please enter the name of the project:\n')
 
 
-default_author = 'Julius Stopforth'
+	## Create the project directory (parent) ##
+	print('Attempting to create directory called ' + project_name + '.')
+	create_dir(project_name)
+	subprocess.call(['cd', project_name])
+	create_dir('asldkfj')
+	git_setup()
 
-creation_date = format_date(date.today())
+	default_author = 'Julius Stopforth'
 
-base_dict = {'project_name': project_name, 'author': default_author, 'date': creation_date}
+	creation_date = format_date(date.today())
 
-makefile_dict = {}
+	main_stub = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
 
-temp_file = open( 'file.template' )
+	base_dict = {'project_name': project_name, 'author': default_author, 'date': creation_date}
 
-src = Template( temp_file.read())
+	makefile_dict = {}
 
-result = src.substitute(template_dict)
+	temp_file = open( 'source.template' )
 
-print( result )
+	src = Template( temp_file.read())
+
+	result = src.safe_substitute(base_dict)
+
+	result += Template( main_stub ).safe_substitute({'param': 'void'})
+
+	print( result )

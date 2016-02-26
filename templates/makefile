@@ -3,14 +3,13 @@
 ## Variable declaration ##
 CC=g++
 CFLAGS= -Wall -c
-LFLAGS= -std=c++11 -I $(LIBDIR) $(LIBFLAGS) 
-LIBFLAGS= -L $(LIBDIR) -lbrain_dead_factorial
-TARGET= driver
-OBJECTS= driver.o
-SOURCES= driver.cpp
+LFLAGS= -std=c++11 
+LIBFLAGS= -L $(LIBDIR)
+TARGET= 
+OBJECTS= 
+SOURCES= 
 
-LIBDIR= ./factorial_library/
-
+LIBDIR= 
 
 ## Build the final executable binary
 $(TARGET): $(OBJECTS)
@@ -24,11 +23,11 @@ $(OBJECTS): pre
 .PHONY: pre
 
 run:
-	export LD_LIBRARY_PATH=./factorial_library/ && ./driver
+	./$(TARGET)
 
-## Make the shared library
+## Make any prerequisites
 pre:
-	$(MAKE) -C $(LIBDIR)
+	#$(MAKE) -C $(LIBDIR)
 
 ## Remove all object and shared object files in the current directory
 clean:
