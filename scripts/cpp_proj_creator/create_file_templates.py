@@ -1,4 +1,4 @@
-# Python script to create skeleton C++ project
+# Python script to create skeleton C++ pnroject
 # Julius Stopforth
 # 18.02.2016
 
@@ -26,7 +26,10 @@ def create_dir(dirname):
 		
 def git_setup():
 	subprocess.call(['git', 'init'])
-
+	## Once the git repo has been created set the local user settings
+	## This must be read from the given config file perhaps?
+	subprocess.call(['git', 'config', '--local', 'user.name', 'Julius Stopforth'])
+	subprocess.call(['git', 'config', '--local', 'user.email', 'stpjul004@myuct.ac.za'])	
 
 if __name__ == "__main__":
 
