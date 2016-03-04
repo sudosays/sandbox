@@ -12,19 +12,25 @@ import json
 from string import Template
 from datetime import date
 
+# WARNING POSSIBLE LOOMING DEPRECATION
+from os import chdir 
+
 # Variables used stored in a single dict
 
 user_data = {}
+MAIN_METHOD = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
 
 def config():
 	try:
 		config_file = open( 'config.json' )
 		# Decode the json file into the dict
-		user_data = json.load(config_file)
+		data = json.load(config_file)
 		config_file.close()	
-		user_data['date'] = format_date(date.today())
+		data['date'] = format_date(date.today())
+		return data;
 	except ValueError:
 		print ("Error: Failed to load config file!")
+		return NULL;		
 
 # Formats given date as DD.MM.YYYY
 def format_date(a_date):
@@ -43,11 +49,14 @@ def create_dir(dirname):
 def git_setup():
 	subprocess.call(['git', 'init'])
 	## Once the git repo has been created set the local user settings
-	## This must be read from the given config file perhaps?
-	subprocess.call(['git', 'config', '--local', 'user.name', user_data['author']])
+	subprocess.call(['git', 'config', '--local', 'user.name', '"' + user_data['author'] + '"'])
 	subprocess.call(['git', 'config', '--local', 'user.email', user_data['email']])	
 
 if __name__ == "__main__":
+
+	# Load the user's info from the config file
+	# Add a check if there is no config file
+	user_data = config()
 
 	## Ask the user for the name of the project ##
 	project_name = input('Please enter the name of the project:\n')
@@ -56,24 +65,5 @@ if __name__ == "__main__":
 	## Create the project directory (parent) ##
 	print('Attempting to create directory called ' + project_name + '.')
 	create_dir(project_name)
-	subprocess.call(['cd', project_name])
-	create_dir('asldkfj')
+	chdir(project_name)
 	git_setup()
-
-	default_author = 'Julius Stopforth'
-
-	creation_date = format_date(date.today())
-
-	MAIN_METHOD = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
-
-	base_dict = {'project_name': project_name, 'author': default_author, 'date': creation_date}
-
-	temp_file = open( 'source.template' )
-
-	src = Template( temp_file.read())
-
-	result = src.safe_substitute(base_dict)
-
-	result += Template( main_stub ).safe_substitute({'param': 'void'})
-
-	print( result )
