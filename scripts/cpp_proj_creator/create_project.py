@@ -5,13 +5,29 @@
 # add os.exec for git repo initialisation
 # add subprocess to change local git user info to preferred info
 
+# ADD READING IN OF CONFIG FILE
+
 import subprocess
+import json
 from string import Template
 from datetime import date
 
+# Variables used stored in a single dict
+
+user_data = {}
+
+def config():
+	try:
+		config_file = open( 'config.json' )
+		# Decode the json file into the dict
+		user_data = json.load(config_file)
+		config_file.close()	
+		user_data['date'] = format_date(date.today())
+	except ValueError:
+		print ("Error: Failed to load config file!")
+
 # Formats given date as DD.MM.YYYY
 def format_date(a_date):
-	
 	datestr = str(a_date.day).zfill(2) + '.'
 	datestr += str(a_date.month).zfill(2) + '.'
 	datestr += str(a_date.year).zfill(4)
@@ -19,17 +35,17 @@ def format_date(a_date):
 
 def create_dir(dirname):
 	try:
-		subprocess.call(['mkdir', project_name])
+		subprocess.call(['mkdir', dirname])
 	except SubprocessError:
-		print('Failed')
+		print('Error: directory creation failed!')
 		raise
 		
 def git_setup():
 	subprocess.call(['git', 'init'])
 	## Once the git repo has been created set the local user settings
 	## This must be read from the given config file perhaps?
-	subprocess.call(['git', 'config', '--local', 'user.name', 'Julius Stopforth'])
-	subprocess.call(['git', 'config', '--local', 'user.email', 'stpjul004@myuct.ac.za'])	
+	subprocess.call(['git', 'config', '--local', 'user.name', user_data['author']])
+	subprocess.call(['git', 'config', '--local', 'user.email', user_data['email']])	
 
 if __name__ == "__main__":
 
@@ -48,11 +64,9 @@ if __name__ == "__main__":
 
 	creation_date = format_date(date.today())
 
-	main_stub = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
+	MAIN_METHOD = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
 
 	base_dict = {'project_name': project_name, 'author': default_author, 'date': creation_date}
-
-	makefile_dict = {}
 
 	temp_file = open( 'source.template' )
 
