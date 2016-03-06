@@ -16,12 +16,12 @@ from datetime import date
 from os import chdir 
 
 # Variables used stored in a single dict
-
 user_data = {}
+
 MAIN_METHOD = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
 
 template_files = {'source':'source.template','header':'header.template','makefile':'makefile.template'}
-
+template_data = {}
 
 def config():
 	try:
@@ -50,7 +50,14 @@ def gen_identifier(astr):
 	else:
 		newstr += '_H'
 	return newstr
-		
+	
+def load_templates():
+	new_dict = {}
+	for filename in template_files:
+		temp_file = open( template_files[filename] )
+		new_dict[filename] = temp_file.read()
+		temp_file.close()
+	return new_dict
 
 def create_dir(dirname):
 	try:
@@ -60,19 +67,22 @@ def create_dir(dirname):
 		raise
 
 def create_file_from_template(filetype, filename, extension=''):
-
-	temp_file = open( template_files[filetype] )
-	raw = Template( temp_file.read())
-	temp_file.close()
-	
+	raw = Template( template_data[filetype] )
 	if (filetype == 'header'):
 		user_data['header_identifier'] = gen_identifier(filename)
+	
+	user_data['filetype'] = filetype
 
 	data = raw.safe_substitute(user_data)
 	
-	if (filename == 'driver' and filetype == 'source'):
-		data += MAIN_METHOD
-	
+	if (filename == 'driver'):
+		if (filetype == 'source'):
+			data += MAIN_METHOD.replace('$param', 'void')
+		#elif (filetype == 'header'):
+			# fix later
+			#data += 'int main(void);'
+
+
 	output = open(filename + extension, 'w')
 	output.write(data)
 	output.close()
@@ -107,17 +117,20 @@ if __name__ == "__main__":
 	# Load the user's info from the config file
 	# Add a check if there is no config file
 	user_data = config()
+	
+	template_data = load_templates()
 
 	## Ask the user for the name of the project ##
 	project_name = input('Please enter the name of the project:\n')
 
+	user_data['project_name'] = project_name
 
 	# Create the project directory (parent) ##
 	print('Attempting to create directory called ' + project_name + '.')
 	create_dir(project_name)
 	
 	# Change into the newly created directory 
-	# chdir(project_name)
+	chdir(project_name)
 	
 	# Files to generate:
 	# - driver.cpp && driver.h

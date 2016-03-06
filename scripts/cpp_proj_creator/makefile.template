@@ -6,14 +6,15 @@
 ## Variable declaration ##
 CC=g++
 CFLAGS= -Wall -c
-LFLAGS= -std=c++11 -I $$(LIBDIR) $$(LIBFLAGS) 
-LIBFLAGS= -L $$(LIBDIR) -lbrain_dead_factorial
+
+#-I $$(LIBDIR) $$(LIBFLAGS) 
+LFLAGS= -std=c++11 
+LIBFLAGS= -L $$(LIBDIR) 
 TARGET= $project_name
 OBJECTS= $objects
 SOURCES= $sources
 
-LIBDIR= ./factorial_library/
-
+LIBDIR= 
 
 ## Build the final executable binary
 $$(TARGET): $$(OBJECTS)
