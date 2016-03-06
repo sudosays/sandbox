@@ -1,0 +1,12 @@
+/*
+* $project_name $filetype file
+* Author: $author
+* Date: $date
+*/
+
+#ifndef $header_identifier
+#define $header_identifier
+
+
+
+#endif

@@ -27,7 +27,7 @@ $$(OBJECTS): pre
 .PHONY: pre
 
 run:
-	export LD_LIBRARY_PATH=./factorial_library/ && ./driver
+	./$$(TARGET)
 
 ## Run these commands before compiling the source code ##
 pre:
@@ -36,3 +36,4 @@ pre:
 ## Remove all object and shared object files in the current directory
 clean:
 	$$(RM) *.o *.so
+	$$(RM) $$(TARGET)
