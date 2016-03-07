@@ -28,7 +28,8 @@ $$(OBJECTS): pre
 .PHONY: pre
 
 run:
-	./$$(TARGET)
+	@ echo "Executing program: " $$(TARGET)
+	@ ./$$(TARGET)
 
 ## Run these commands before compiling the source code ##
 pre:
@@ -36,5 +37,7 @@ pre:
 
 ## Remove all object and shared object files in the current directory
 clean:
-	$$(RM) *.o *.so
-	$$(RM) $$(TARGET)
+	@ $$(RM) *.o *.so
+	@ $$(RM) $$(TARGET)
+	@echo "Removed all binary and object files"
+	

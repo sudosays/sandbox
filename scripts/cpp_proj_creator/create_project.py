@@ -109,7 +109,8 @@ def git_setup():
 	subprocess.call(['git', 'config', '--local', 'user.email', user_data['email']])	
 	# Automate the initial commit
 	# ENSURE FILES HAVE BEEN CREATED?	
-	#subprocess.call(['git', 'commit', '-m', 'Initial commit']) 
+	subprocess.call(['git','add','--all'])
+	subprocess.call(['git', 'commit', '-m', 'Initial commit']) 
 	
 
 if __name__ == "__main__":
@@ -130,6 +131,7 @@ if __name__ == "__main__":
 	create_dir(project_name)
 	
 	# Change into the newly created directory 
+	print('Changing into directory ' + project_name + '.')
 	chdir(project_name)
 	
 	# Files to generate:
@@ -137,11 +139,14 @@ if __name__ == "__main__":
 	# - sourcefile.cpp && source.h
 	# - makefile incl. above files 
 	
+	
 	files = [project_name, 'driver']	
+	print ('Creating files from templates.')
 	gen_files(files)
 	
 	
 	# Initialise the git repository
-	# git_setup()
+	print('Initialising git repository and making initial commit.')
+	git_setup()
 	
 	
