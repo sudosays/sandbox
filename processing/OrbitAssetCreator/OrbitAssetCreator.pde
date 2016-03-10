@@ -12,7 +12,7 @@ star[] galaxy = new star[400];
 
 planet moon = new planet();
 
-boolean isDev = true;
+boolean isDev = false;
 
 void setup()
 {

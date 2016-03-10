@@ -5,23 +5,38 @@
 **/
 
 // 0 means empty 1 means alive
-byte[][] grid = new byte[10][10];
+byte[][] grid = new byte[100][100];
 
 
 void setup ()
 {
+  frameRate(10);
   size(400,400);
   
-  // General debug/testing seed
-  grid[5][3] = 1;
+  //noLoop();
+  noStroke();
+  
+  // General debug/testing seed (Glider)
+  grid[4][4] = 1;
+  grid[5][5] = 1;
   grid[5][6] = 1;
+  grid[4][6] = 1;
+  grid[3][6] = 1;
+  
+  /*
+  {0,0,1}
+  {1,0,1}
+  {0,1,1}
+  */
 
 }
 
 void draw()
 {
   background(255);
-
+  grid = update_grid(grid);
+  println("Starting to draw");
+  draw_grid(grid);
 }
 
 byte[][] update_grid(byte[][] oldgrid)
@@ -35,26 +50,46 @@ byte[][] update_grid(byte[][] oldgrid)
   * 4. x = 1  if x = 0 && N = 3
   */
   
-  
-  byte[][] newgrid = new byte [10][10];
+  byte[][] newgrid = new byte [100][100];
   
   for (int i=0; i < oldgrid.length; i++)
   {
-    
-    for (int j=0; < oldgrid[i].length; i++)
+    String row = "";
+    for (int j=0; j < oldgrid[i].length; j++)
     {
-    
+      row += oldgrid[i][j] + ", ";
+      
+      int N = find_neighbours(oldgrid, j, i);
+      
+      if (N < 0)
+      {
+        println("Error occurred updating grid!");
+        return null;
+      }
+      
+      if (oldgrid[i][j] > 0)
+      {
+        if ( N < 2 || N > 3) { newgrid[i][j] = 0; }
+        else { newgrid[i][j] = 1;}
+      }
+      else if (oldgrid[i][j] == 0)
+      {
+        if (N == 3) { newgrid[i][j] = 1; }
+      }
+      
     }
+    println(row);
    
   }
   
-  return null;
+  println("Completed update!");
+  return newgrid;
 }
 
-int find_neighbours(byte[][] grid, int posx, int posy)
+int find_neighbours(byte[][] agrid, int posx, int posy)
 {
-  if ((posx >= grid[0].length || posx < 0)||
-  (posy >= grid.length || posy < 0))
+  if ((posx >= agrid[0].length || posx < 0)||
+  (posy >= agrid.length || posy < 0))
   {
     println("Error: Position of x:", posx, " y:", posy, " is outside the grid!");
     return -1;
@@ -69,6 +104,52 @@ int find_neighbours(byte[][] grid, int posx, int posy)
   *        /   |   \
   * (-1,+1) ( 0,+1) (+1,+1)
   **/
+  
+  int num = 0;
+  
+  for (int y= -1; y <= 1; y++)
+  {
+    // If the y value is out of bounds then the posistion is right at the top or bottom border of the grid
+    if ((posy + y) >= agrid.length || (posy + y) < 0 ) { continue; }
+    
 
+    
+    for (int x = -1; x <=1; x++)
+    {
+      //println("X:", x, " XPOS:", posx, " Y:", y, " YPOS:", posy );
+      // If the x value is out of bounds skip it
+      if ((posx + x) >= agrid[posy].length || (posx + x) < 0 ) { continue; }
+      
+      if (agrid[posy+y][posx+x] > 0 && !(x==0 && y==0)) { num++; }
+    
+    }
+  }
+  
+  return num;
+
+}
+
+void draw_grid(byte[][] agrid)
+{
+  println("In the draw function!");
+  float colwidth = width/(float)agrid[0].length;
+  float rowheight = height/(float)agrid.length;
+
+  for(int i=0; i < agrid.length; i++)
+  {
+    for(int j=0; j < agrid[i].length; j++)
+    {
+      if (agrid[i][j] == 0) { continue; }
+      float xpos = j*colwidth;
+      float ypos = i*rowheight;
+      
+      println("drawing!");
+      
+
+      fill(0);
+      ellipse(xpos, ypos, colwidth, rowheight );
+    }
+
+  }
 
 }
