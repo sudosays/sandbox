@@ -5,8 +5,13 @@
 **/
 
 // 0 means empty 1 means alive
-byte[][] grid = new byte[100][100];
+byte[][] grid;
 
+color backgroundColor = #39d4f2;
+color foregroundColor = #03c03c;
+
+int numcols, numrows;
+int population;
 
 void setup ()
 {
@@ -16,27 +21,43 @@ void setup ()
   //noLoop();
   noStroke();
   
-  // General debug/testing seed (Glider)
-  grid[4][4] = 1;
-  grid[5][5] = 1;
-  grid[5][6] = 1;
-  grid[4][6] = 1;
-  grid[3][6] = 1;
+  numcols = numrows = 100;
   
-  /*
-  {0,0,1}
-  {1,0,1}
-  {0,1,1}
-  */
+  grid = new byte[numrows][numcols];
+  population = 0;
+  
+  // General debug/testing seed (Glider)
+  
+  // T-shape
+  grid[50][50] = 1;
+  grid[51][50] = 1;
+  grid[50][51] = 1;
+  grid[50][49] = 1;
+  
+  //Glider 1
+  grid [48][45] = 1;
+  grid [48][44] = 1;
+  grid [48][43] = 1;
+  grid [47][45] = 1;
+  grid [46][45] = 1;
+  
+  //Glider 2
+  grid [52][55] = 1;
+  grid [52][56] = 1;
+  grid [52][57] = 1;
+  grid [53][55] = 1;
+  grid [54][55] = 1;
+  
+  population = 14;
 
 }
 
 void draw()
 {
-  background(255);
+  background(backgroundColor);
   grid = update_grid(grid);
-  println("Starting to draw");
   draw_grid(grid);
+  println("Population: ", population);
 }
 
 byte[][] update_grid(byte[][] oldgrid)
@@ -50,14 +71,13 @@ byte[][] update_grid(byte[][] oldgrid)
   * 4. x = 1  if x = 0 && N = 3
   */
   
-  byte[][] newgrid = new byte [100][100];
+  byte[][] newgrid = new byte [numrows][numcols];
   
   for (int i=0; i < oldgrid.length; i++)
   {
-    String row = "";
+    
     for (int j=0; j < oldgrid[i].length; j++)
     {
-      row += oldgrid[i][j] + ", ";
       
       int N = find_neighbours(oldgrid, j, i);
       
@@ -69,20 +89,17 @@ byte[][] update_grid(byte[][] oldgrid)
       
       if (oldgrid[i][j] > 0)
       {
-        if ( N < 2 || N > 3) { newgrid[i][j] = 0; }
+        if ( N < 2 || N > 3) { newgrid[i][j] = 0; population--; }
         else { newgrid[i][j] = 1;}
       }
       else if (oldgrid[i][j] == 0)
       {
-        if (N == 3) { newgrid[i][j] = 1; }
+        if (N == 3) { newgrid[i][j] = 1; population++;}
       }
       
     }
-    println(row);
    
   }
-  
-  println("Completed update!");
   return newgrid;
 }
 
@@ -111,12 +128,9 @@ int find_neighbours(byte[][] agrid, int posx, int posy)
   {
     // If the y value is out of bounds then the posistion is right at the top or bottom border of the grid
     if ((posy + y) >= agrid.length || (posy + y) < 0 ) { continue; }
-    
-
-    
+ 
     for (int x = -1; x <=1; x++)
     {
-      //println("X:", x, " XPOS:", posx, " Y:", y, " YPOS:", posy );
       // If the x value is out of bounds skip it
       if ((posx + x) >= agrid[posy].length || (posx + x) < 0 ) { continue; }
       
@@ -131,9 +145,8 @@ int find_neighbours(byte[][] agrid, int posx, int posy)
 
 void draw_grid(byte[][] agrid)
 {
-  println("In the draw function!");
-  float colwidth = width/(float)agrid[0].length;
-  float rowheight = height/(float)agrid.length;
+  float colwidth = width/(float)numcols;
+  float rowheight = height/(float)numrows;
 
   for(int i=0; i < agrid.length; i++)
   {
@@ -143,10 +156,7 @@ void draw_grid(byte[][] agrid)
       float xpos = j*colwidth;
       float ypos = i*rowheight;
       
-      println("drawing!");
-      
-
-      fill(0);
+      fill(foregroundColor);
       ellipse(xpos, ypos, colwidth, rowheight );
     }
 
