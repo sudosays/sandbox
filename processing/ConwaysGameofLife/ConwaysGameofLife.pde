@@ -16,7 +16,7 @@ int population;
 void setup ()
 {
   frameRate(10);
-  size(400,400);
+  size(800,800);
   
   //noLoop();
   noStroke();
@@ -145,6 +145,7 @@ int find_neighbours(byte[][] agrid, int posx, int posy)
 
 void draw_grid(byte[][] agrid)
 {
+  // The column widths and heights must be able to change to both gridsize and canvas size
   float colwidth = width/(float)numcols;
   float rowheight = height/(float)numrows;
 
@@ -162,4 +163,12 @@ void draw_grid(byte[][] agrid)
 
   }
 
+
 }
+
+PVector castToGrid(PVector rayPos)
+  {
+    
+    return null;
+  
+  }
