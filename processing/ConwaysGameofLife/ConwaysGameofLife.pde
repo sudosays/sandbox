@@ -16,7 +16,7 @@ int population;
 void setup ()
 {
   frameRate(10);
-  size(800,800);
+  size(600,600);
   
   //noLoop();
   noStroke();
@@ -149,13 +149,13 @@ void draw_grid(byte[][] agrid)
   float colwidth = width/(float)numcols;
   float rowheight = height/(float)numrows;
 
-  for(int i=0; i < agrid.length; i++)
+  for(int i= 0; i < agrid.length; i++)
   {
-    for(int j=0; j < agrid[i].length; j++)
+    for(int j= 0; j < agrid[i].length; j++)
     {
       if (agrid[i][j] == 0) { continue; }
-      float xpos = j*colwidth;
-      float ypos = i*rowheight;
+      float xpos = colwidth/2 + j*colwidth;
+      float ypos = rowheight/2 + i*rowheight;
       
       fill(foregroundColor);
       ellipse(xpos, ypos, colwidth, rowheight );
@@ -164,6 +164,11 @@ void draw_grid(byte[][] agrid)
   }
 
 
+}
+
+void keyPressed()
+{
+  saveFrame("conways-###.png");
 }
 
 PVector castToGrid(PVector rayPos)

@@ -13,7 +13,7 @@ void draw()
 
  if (mousePressed)
  {
-   float size = random(16,64);
+   float size = random(1,64);
    
    ellipse(mouseX, mouseY, size,size);
    ellipse(width-mouseX, mouseY,size,size);
