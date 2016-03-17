@@ -5,7 +5,10 @@
 #include <algorithm>
 using namespace std;
 
+//---- My code ----//
 long long int recursiveArraySum(vector<int> &array, int n);
+//-----------------//
+
 
 int main(){
     int n;
@@ -20,13 +23,21 @@ int main(){
     return 0;
 }
 
+/**
+*
+* Custom recursive function to calculate large numbers.
+* 
+* This can be seen as a 'discount' parallel programming solution where the multiple
+* big additions are reach allocated their own recursive 'thread'
+* NB! WILL NOT SCALE NICELY WITH LARGE ARRAYS
+**/
 long long int recursiveArraySum(vector<int> &array, int n)
 {
 	if (n > 2)
     {
        int halfway = floor(n/2);
        
-		 // find middle index
+		// find middle index
         vector<int> first(halfway);
         vector<int> second(n-halfway);
  
