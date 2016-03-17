@@ -13,9 +13,11 @@ color foregroundColor = #03c03c;
 int numcols, numrows;
 int population;
 
+boolean paused = false;
+
 void setup ()
 {
-  frameRate(10);
+  frameRate(30);
   size(600,600);
   
   //noLoop();
@@ -55,9 +57,31 @@ void setup ()
 void draw()
 {
   background(backgroundColor);
-  grid = update_grid(grid);
+  if (!paused)
+  {
+    grid = update_grid(grid);
+  }
   draw_grid(grid);
   println("Population: ", population);
+  
+  if (mousePressed)
+  {
+    PVector gridPos = castToGrid(new PVector(mouseX, mouseY));
+    
+    if (grid[(int)gridPos.y][(int)gridPos.x] > 0)
+    {
+      grid[(int)gridPos.y][(int)gridPos.x] = 0;
+      population--;
+    } else
+    {
+      grid[(int)gridPos.y][(int)gridPos.x]++;
+      population++;
+    }
+    
+    return;
+    
+  }
+  
 }
 
 byte[][] update_grid(byte[][] oldgrid)
@@ -168,12 +192,32 @@ void draw_grid(byte[][] agrid)
 
 void keyPressed()
 {
-  saveFrame("conways-###.png");
+  
+  if (key == ' ')
+  {
+    paused = !paused;
+  }
+  
+  if (key == 's')
+  {
+    saveFrame("conways-###.png");
+  }
+  
 }
 
 PVector castToGrid(PVector rayPos)
   {
+    int gridX, gridY;
+    float cellWidth, cellHeight;
     
-    return null;
+    cellWidth = width/numcols;
+    cellHeight = height/numrows;
+    
+    float offset = cellWidth/2;
+    
+    gridX = floor((rayPos.x - offset)/cellWidth);
+    gridY = floor((rayPos.y)/cellHeight);
+    
+    return new PVector(gridX,gridY);
   
   }
