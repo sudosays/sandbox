@@ -197,16 +197,25 @@ void keyPressed()
   {
     paused = !paused;
   }
-  
-  if (key == 's')
+  else if (key == 's')
   {
     saveFrame("conways-###.png");
   }
+  else if (key == 'r')
+  {
+    grid = randomizeGrid(grid, 3000);
+  }
+  else if (key=='R')
+  {
+    setup();
+  }
+  
+  
   
 }
 
 PVector castToGrid(PVector rayPos)
-  {
+{
     int gridX, gridY;
     float cellWidth, cellHeight;
     
@@ -219,5 +228,20 @@ PVector castToGrid(PVector rayPos)
     gridY = floor((rayPos.y)/cellHeight);
     
     return new PVector(gridX,gridY);
+}
+
+byte[][] randomizeGrid(byte[][] canvas, int population)
+{
+  int gridHeight = canvas.length;
+  int gridWidth = canvas[0].length;
   
+  byte[][] seededGrid = new byte[gridHeight][gridWidth];
+  
+  
+  for (int i = 0; i < population; i++)
+  {
+    seededGrid[(int)random(0,gridHeight)][(int) random(0, gridWidth)] = 1;
   }
+  
+  return seededGrid;
+}
