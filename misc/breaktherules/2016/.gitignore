@@ -1,0 +1,5 @@
+# Basic gitignore file for python
+
+*.swp
+
+__pycache__
