@@ -15,5 +15,4 @@ def pangram_check(aString):
 		if ((letter not in tempstr) and (letter in alphabet) ):
 			tempstr += letter
 	tempstr = ''.join(sorted(tempstr))
-	print(tempstr)
 	return (alphabet == tempstr)
