@@ -1,0 +1,40 @@
+#--------------------------#
+# Basic C++ gitignore file #
+# Author: Julius Stopforth #
+#--------------------------#
+
+
+#---------#
+# Folders #
+#---------#
+
+bin
+obj
+misc
+
+#------------#
+# File types #
+#------------#
+
+## C++ Specific ##
+
+*.o
+*.so
+
+## Vim ##
+
+*.swp
+
+#----------------#
+# Specific files #
+#----------------#
+
+## gcc default binary name ##
+
+a.out
+
+## Assignment specific output files
+
+*.dat
+
+*.raw
