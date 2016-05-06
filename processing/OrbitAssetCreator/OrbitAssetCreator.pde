@@ -12,7 +12,7 @@ star[] galaxy = new star[400];
 
 planet moon = new planet();
 
-boolean isDev = false;
+boolean isDev = true;
 
 void setup()
 {
@@ -46,7 +46,7 @@ void draw()
   ellipse(256,256,380, 380);
   
   // Draw the stars
-  strokeWeight(1);
+  strokeWeight(3);
   for (int i=0; i < 400; i++)
   {
     int starshine = lerpColor(white, azure, random(1));
@@ -62,13 +62,25 @@ void draw()
   
   // Setup brush for planetary sketching
   stroke(white);
+  strokeWeight(4);
   fill(azure);
 
+  //ellipse(256,256,508,508);
+
+
   // Create a blue geoid shape.
-  ellipse(256,256,256,256);
+  for (int i = 0; i < 5; ++i)
+  {
+      if (i > 0) {strokeWeight(1);}
+      ellipse(256,256,508-(100*i),508);
+  
+  }
+  
+  line(256,0,256,508);
+
 
   
-  //save("planet-###.png");
+  //save("planet-"+random(0,100) +".png");
 
 }
 
@@ -93,12 +105,13 @@ class planet
   float orbitalprog = -1;
   PVector pos;
   color col;
+  int radius = 64;
   
   void draw()
   {
     stroke(white);
     fill(col);
-    ellipse(pos.x,pos.y,64,64);
+    ellipse(pos.x,pos.y,radius*2,radius*2);
     update();
   }
   
@@ -106,8 +119,8 @@ class planet
   {
     
     orbitalprog += 0.001;
-    pos.x = 256+190*cos(orbitalprog);
-    pos.y = 256+190*sin(orbitalprog);
+    pos.x = ((int)width/2)+190*cos(orbitalprog);
+    pos.y = ((int)height/2)+190*sin(orbitalprog);
     
   }
 
