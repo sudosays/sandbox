@@ -1,0 +1,1 @@
+Writing a python script to automatically set up C++ projects for assignments. Using JSON configs and file templates to generate makefiles and source files as well as initialising git repos and doing the initial commit. Project can be found here: https://github.com/jjstopforth/sandbox/tree/master/scripts/cpp_proj_creator (Work in progress)

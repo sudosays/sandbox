@@ -18,7 +18,7 @@ from os import chdir
 # Variables used stored in a single dict
 user_data = {}
 
-MAIN_METHOD = 'int main($param)\n{\n\t\n\treturn 0;\n}\n'
+MAIN_METHOD = 'int main($param)'
 
 template_files = {'source':'source.template','header':'header.template','makefile':'makefile.template'}
 template_data = {}
@@ -77,12 +77,11 @@ def create_file_from_template(filetype, filename, extension=''):
 	
 	if (filename == 'driver'):
 		if (filetype == 'source'):
-			data += MAIN_METHOD.replace('$param', 'void')
-		#elif (filetype == 'header'):
-			# fix later
-			#data += 'int main(void);'
-
-
+			data += MAIN_METHOD + '\n{\n\t\n\treturn 0;\n}\n'
+		elif (filetype == 'header'):
+			data += MAIN_METHOD + ';\n\n#endif'
+	elif (filetype == 'header'):
+		data += '#endif'
 	output = open(filename + extension, 'w')
 	output.write(data)
 	output.close()
@@ -124,7 +123,21 @@ if __name__ == "__main__":
 	## Ask the user for the name of the project ##
 	project_name = input('Please enter the name of the project:\n')
 
+	print("Select main method parameters:\n1) argc, argv\n2) void")
+	
+	choice = eval(input("Enter choice:\n"))
+	
+	if choice == 1:
+		MAIN_METHOD = MAIN_METHOD.replace('$param','int argc, char * argv[]')
+	elif choice == 2:
+		MAIN_METHOD = MAIN_METHOD.replace('$param','void')
+
 	user_data['project_name'] = project_name
+
+	class_name = input('Specify name of implementation class (default = ' + project_name + '):\n')
+
+	if (class_name == ''):
+		class_name = project_name
 
 	# Create the project directory (parent) ##
 	print('Attempting to create directory called ' + project_name + '.')
@@ -137,16 +150,15 @@ if __name__ == "__main__":
 	# Files to generate:
 	# - driver.cpp && driver.h
 	# - sourcefile.cpp && source.h
-	# - makefile incl. above files 
-	
-	
-	files = [project_name, 'driver']	
+	# - makefile incl. above files 	
+
+	files = [class_name, 'driver']	
 	print ('Creating files from templates.')
 	gen_files(files)
 	
 	
 	# Initialise the git repository
 	print('Initialising git repository and making initial commit.')
-	git_setup()
+#	git_setup()
 	
 	
