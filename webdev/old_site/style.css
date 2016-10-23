@@ -1,0 +1,250 @@
+/* Copyright JJSTOPFORTH 2013 */
+
+/* Style sheet with CSS3 Standard */
+
+/* IDs & Elements */
+
+/*MAIN*/
+
+#main {
+	height:100%;
+	margin-bottom: -100px; 
+	position: relative;
+}
+
+#main:after{	
+	content: "";
+	display: block;
+}
+
+body{
+    color: #fff;
+}
+
+/*NAV*/
+
+nav {
+	padding: 20px 30px;
+	text-align:center;
+}
+ 
+nav ul {
+	text-align: center;
+	padding: 0px 30px;
+	list-style: none;
+	position:relative;
+	margin: 0 auto;
+	display: inline-table;
+	background-color: #f3f3f3;
+	border-radius: 0px 20px 0 20px;
+}
+
+nav ul li {
+	float: left;
+    border-radius: 10px;
+}
+
+nav ul li:hover {
+	background: -moz-radial-gradient(#f3f3f3, #e1e1e1); 
+	background: -radial-gradient(#f3f3f3, #e1e1e1); 
+	color: #FFFFFF;
+}
+
+nav ul li a {
+	display: block; 
+	padding: 10px 16px;
+	color: #000000; 
+	text-decoration: none;
+}
+
+nav ul li:hover a {
+	color: #4099FF;
+}
+
+/*POST*/
+
+#post {
+	width: 550px;
+	margin:0 auto;
+	/*border-left: 0px solid;
+	border-bottom: 7px solid;
+	border-top:0px solid;
+	border-right:3px solid;
+	*/border-radius: 20px;/*
+    border-color: #494949;*/
+	padding: 10px 10px;
+	background-color: #000;
+    color: #fff;
+    position: relative;
+    margin-top: 10px;
+
+}
+
+#post h1 {
+	margin-bottom: 0;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	font-family: "Helvetica"
+}
+
+#post h2 {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-weight: normal;
+	font-style: italic;
+	font-size: 08pt;
+	padding-top: 0;
+	padding-left: 5px;
+}
+
+#post p {
+	text-align: justify;
+	padding:10px 10px;
+	text-indent: 50px;
+	word-wrap: break-word;
+}
+
+#post br {
+    text-indent: 50px;
+}
+
+
+/*FOOTER*/
+footer {
+	padding-top: 20px;
+	padding-bottom:10px;
+	font-size: 8pt;
+	color: #ffffff;
+	text-align: center;
+	clear: both;
+}
+
+footer, #main:after{
+	height:100px;
+}
+
+/*BIO*/
+
+#sheet {
+	overflow:hidden;
+	width: 75%;
+	margin: 0 auto;
+	background-color: #333;
+	border-radius:20px;
+	padding: 20px 20px;
+}
+
+/* Classes */
+
+/*IMG+PROPIC*/
+img.propic {
+	
+	clear: both;
+	margin: 0 auto;
+	border-radius:100px;
+	height: 140px;
+	width: 140px;
+}
+
+/* BRICK LINK/TEXT*/
+.brick {
+	color: #FFF;
+	background-color: #0099FF;
+	padding: 10px 10px;
+    /*border-top: 5px solid #0099FF;*/
+    border-bottom: 5px solid #0099FF;
+	border-radius: 5px;
+}
+
+.brick:hover {
+	background-color:#24a8ff;
+	padding: 10px 10px;
+    border-top: 0px solid;
+	border-bottom: 5px solid #008dea;
+}
+
+/*DETAILS*/
+
+.details table{
+	margin-top: 5px;
+	padding: 5px 5px;
+}
+
+.details tr td {
+	width:auto;
+	padding: 5px;
+	margin: 1px;
+}
+
+/*ITEMS*/
+
+.item{
+	width: auto;
+	border: 3px solid/*dashed*/ #000;
+	border-radius: 10px;
+	padding: 10px 10px;
+	margin: 5px;
+	float: left;
+    background-color: #000;
+}
+.item:hover{
+	border: 3px solid #0099FF/*#c5c5c5*/;	
+}
+
+.item ul {
+	list-style: none;
+}
+
+/* Default HTML tags */
+
+a {
+	/* Disables the default underline of links and gives them a color*/
+	text-decoration: none;
+	color: #4099FF;
+}
+
+a : hover {
+    color: #24a8ff;
+}
+
+/*BODY*/
+body {
+	font-family: "Helvetica";
+	background-color: #333/*#3399FF*/;
+    
+	/*background-image:url('./imgs/Cloud - Single.gif');
+	background-repeat:repeat;*/
+}
+
+/*CODE*/
+
+code { 
+	/* Used to show 'code-text' with <code> tag by 'overriding' the default tag.*/
+	border: 3px dashed #c5c5c5;
+	border-radius: 10px;
+	padding: 10px;
+	font-family: "Monaco", monospace;
+	display: block;
+	 line-height: 1.2em;
+	}
+	
+code::selection {
+	/* Changes the default selection/highlight colours for the 'code' class */
+	background-color: #FF6666; /* 'Higlight' colour becomes blue */
+	outline: #FF6666;
+}
+
+code::-moz-selection {
+	/* Changes the default selection/highlight colours for the 'code' class */
+	background-color: #FF6666;
+	outline: #FF6666;/* 'Higlight' colour becomes dark green */
+}
+
+p::-moz-selection {
+    background-color: #0099FF;
+    outline: #0099FF;
+}
+
+p::selection {
+    background-color: #0099FF;
+    outline: #0099FF;
+}
