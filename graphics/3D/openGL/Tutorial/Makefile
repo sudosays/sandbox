@@ -11,9 +11,11 @@ SOURCES=tutorial.cpp
 
 LIBDIR=/libs
 
+default: $(TARGET)
+
 ## Build the final executable binary
 $(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGET) $(OBJECTS) $(LFLAGS)
+	$(CC) -o $(TARGET) $(OBJECTS) $(LFLAGS) $(LIBFLAGS)
 
 ## Build the object files if not yet present
 $(OBJECTS): pre
@@ -23,7 +25,7 @@ $(OBJECTS): pre
 .PHONY: pre
 
 run:
-	./$(TARGET)
+	export LD_LIBRARY_PATH=.$(LIBDIR); ./$(TARGET)
 
 ## Make any prerequisites
 ##$(MAKE) -C $(LIBDIR)
