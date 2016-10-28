@@ -21,6 +21,36 @@ The following project was created by following the learnopengl.com tutorial
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+
+// Define vertex data
+GLfloat verticies[] = 
+{
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f,
+};
+
+
+/**
+
+Main file
+
+Author: Julius Stopforth
+Date: 25.10.2016
+
+The following project was created by following the learnopengl.com tutorial
+
+**/
+
+
+// This is necessary otherwise GLEW will be dynamically linked instead
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// GLFW lib
+#include <GLFW/glfw3.h>
+
 
 int main(void)
 {
@@ -93,5 +123,58 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     { glfwSetWindowShouldClose(window, GL_TRUE); }
+
+}
+
+GLuint loadShader(std::string shaderName, GLenum shaderType)
+{
+
+    std::ifstream shaderFile(shaderName, std::ifstream::in);
+
+    if (!shaderFile) 
+    { 
+        std::cout << "Error opening shader file: " << shaderName << std::endl; 
+        return -1;
+    }
+
+    // Get file length
+    shaderFile.seekg(0, shaderFile.end); // seekg sets the pos in the file
+    int length = shaderFile.tellg(); // tellg provides the current pos in the file as int
+    shaderfile.seekg(0, shaderFile.beg); // Move back to the start of the file in preparation for reading
+
+    char* rawData = new char[length]; // Create a new string long enough to hold the file contents
+
+    shaderFile.read(rawData, length); // Read all the data from the file
+
+    // Check for any errors after reading
+    if (shaderFile)
+    { std::cout << "File read successfully" << std::endl; }
+    else
+    { std::cout << "Error while reading file. Only read " << shaderFile.gcount() << std::endl; }
+
+    shaderFile.close();
+
+    // Now that rawData contains the shader file data, create the shader
+    GLUint newShader;
+    newShader = glCreateShader(shaderType); // Where shader type is GL_[VERTEX/FRAGMENT]_SHADER
+
+    // Attatch the source code for shader to compile
+    glShaderSource(newShader, 1, &rawData, NULL);
+    // glShaderSource (uint, sizei, char**, length)
+    
+    // COMPILE! \:D/
+    glCompileShader(newShader);
+
+    //Checking if shader compiled successfully
+    GLint successful;
+    GLchar infoLog[512];
+    glGetShaderiv(newSHader, GL_COMPILE_STATUD, &success);
+    if (!successful)
+    { std::cout << "Shader failed to compile successfully" << std::endl << infoLog << std::endl; }
+    
+    // Clean up mem alloc to rawData C string
+    delete rawData[];
+
+    return newShader;
 
 }

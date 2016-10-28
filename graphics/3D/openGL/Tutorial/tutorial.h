@@ -22,8 +22,12 @@ The following project was created by following the learnopengl.com tutorial
 // GLFW lib
 #include <GLFW/glfw3.h>
 
+#include <string>
+
 int main(void);
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
+GLuint loadShader(std::string shaderName, GLenum shaderType);  
 
 #endif
