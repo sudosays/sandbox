@@ -31,29 +31,32 @@ GLfloat verticies[] =
      0.0f,  0.5f, 0.0f,
 };
 
+// Unique vtcs for a rectangle
+GLfloat rectVerts[] =
+{
+     0.5f,  0.5f, 0.0f, // Top Right
+     0.5f, -0.5f, 0.0f, // Bottom Right
+    -0.5f, -0.5f, 0.0f, // Bottom Left
+    -0.5f,  0.5f, 0.0f  // Top Left
+};
 
-/**
+GLuint rectIndices[] = 
+{
 
-Main file
+    0, 1, 3, // Triangle 1
+    1, 2, 3  // Triangle 2
 
-Author: Julius Stopforth
-Date: 25.10.2016
-
-The following project was created by following the learnopengl.com tutorial
-
-**/
+};
 
 
-// This is necessary otherwise GLEW will be dynamically linked instead
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW lib
-#include <GLFW/glfw3.h>
+bool wireframeMode;
 
 
 int main(void)
 {
+    
+    wireframeMode = false;
+    
     glfwInit();
     // Set opengl version to minimum 3.3 where <x>.<x> is <MAJOR>.<MINOR>
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -143,11 +146,20 @@ int main(void)
     // Create the needed vertex Buffer obj
     GLuint vertexBufferObject;
     glGenBuffers(1, &vertexBufferObject);
+   
+    // Create the Element Buffer Object
+    GLuint elementBufferObject;
+    glGenBuffers(1, &elementBufferObject);
 
-    // Bind it
+    // Bind buffers to VAO
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
     // Insert the buffer data from our vertex array
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(rectVerts), rectVerts, GL_STATIC_DRAW);
+    
+    // Fill EBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rectIndices), rectIndices, GL_STATIC_DRAW);
+    
     // Set the vertex attribute pointers
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     // Enable the attrib pointer with id 0 that we just configd
@@ -171,8 +183,12 @@ int main(void)
         glUseProgram(shaderProgram);
 
         glBindVertexArray(vertexArrayObject);
-        
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+   
+        // Draw elements from EBO using indices
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Use this when drawing vertex arrays
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
         
         glBindVertexArray(0);
 
@@ -194,6 +210,21 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     { glfwSetWindowShouldClose(window, GL_TRUE); }
+    else if(key == GLFW_KEY_W && action == GLFW_PRESS)
+    {
+        if(wireframeMode)
+        {
+            // Set wireframe mode off
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+        else
+        {
+            // Turn on wireframe mode
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+
+        wireframeMode = !wireframeMode;
+    }
 
 }
 
