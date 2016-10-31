@@ -94,6 +94,68 @@ int main(void)
     // Registering the user defined key callback method
     glfwSetKeyCallback(window, key_callback);
 
+
+    // OTHER INIT STUFF
+
+    // Create/load vert and frag shaders
+    GLuint vertexShader = loadShader("shader.vert", GL_VERTEX_SHADER);
+    GLuint fragmentShader = loadShader("shader.frag", GL_FRAGMENT_SHADER);
+
+    // Create a shader program to link the vert/frag shaders to
+    GLuint shaderProgram;
+    shaderProgram = glCreateProgram();
+
+    // Attatch the two shaders to the program
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    
+    // Link the shaders together in the final shader program
+    glLinkProgram(shaderProgram);
+
+    // Delete the shaders after linking
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    // Check for issues in shader linking (just like shader compilation)
+    GLint successful;
+    GLchar infoLog[512];
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &successful);
+    if (!successful)
+    { 
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "Error in linking shaders." << std::endl << infoLog << std::endl; 
+    }
+
+    // Tell OpenGL to render using the provided shader program
+    // Can also be placed in game loop
+    glUseProgram(shaderProgram);
+
+
+    // Vertex Buffers init
+
+    // Create a new vertex array object
+    GLuint vertexArrayObject;
+    glGenVertexArrays(1, &vertexArrayObject);
+
+    // Bind the VAO so that VBO's can be linked
+    glBindVertexArray(vertexArrayObject);
+
+    // Create the needed vertex Buffer obj
+    GLuint vertexBufferObject;
+    glGenBuffers(1, &vertexBufferObject);
+
+    // Bind it
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+    // Insert the buffer data from our vertex array
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+    // Set the vertex attribute pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    // Enable the attrib pointer with id 0 that we just configd
+    glEnableVertexAttribArray(0);
+
+    // Unbind the vertexArrayObject
+    glBindVertexArray(0);
+
     //Create a game loop
     while(!glfwWindowShouldClose(window)) // Waits until GLFW has been told to shutdown
     {
@@ -104,6 +166,15 @@ int main(void)
         // All rendering commands should go here, AND MUST be before the swap buffers
         glClearColor(0.2f,0.3f,0.3f,1.0f); // <- State setting function
         glClear(GL_COLOR_BUFFER_BIT);// <- state-using function
+
+        // DRAW THE VAO TO THE BUFFER WITH THE SHADER PROG
+        glUseProgram(shaderProgram);
+
+        glBindVertexArray(vertexArrayObject);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
+        glBindVertexArray(0);
 
         // Swaps in the new color buffer containint the color vals for each pixel in the GLFW window
         glfwSwapBuffers(window);
@@ -140,7 +211,7 @@ GLuint loadShader(std::string shaderName, GLenum shaderType)
     // Get file length
     shaderFile.seekg(0, shaderFile.end); // seekg sets the pos in the file
     int length = shaderFile.tellg(); // tellg provides the current pos in the file as int
-    shaderfile.seekg(0, shaderFile.beg); // Move back to the start of the file in preparation for reading
+    shaderFile.seekg(0, shaderFile.beg); // Move back to the start of the file in preparation for reading
 
     char* rawData = new char[length]; // Create a new string long enough to hold the file contents
 
@@ -155,7 +226,7 @@ GLuint loadShader(std::string shaderName, GLenum shaderType)
     shaderFile.close();
 
     // Now that rawData contains the shader file data, create the shader
-    GLUint newShader;
+    GLuint newShader;
     newShader = glCreateShader(shaderType); // Where shader type is GL_[VERTEX/FRAGMENT]_SHADER
 
     // Attatch the source code for shader to compile
@@ -168,12 +239,18 @@ GLuint loadShader(std::string shaderName, GLenum shaderType)
     //Checking if shader compiled successfully
     GLint successful;
     GLchar infoLog[512];
-    glGetShaderiv(newSHader, GL_COMPILE_STATUD, &success);
+    glGetShaderiv(newShader, GL_COMPILE_STATUS, &successful);
     if (!successful)
-    { std::cout << "Shader failed to compile successfully" << std::endl << infoLog << std::endl; }
-    
+    { 
+        glGetShaderInfoLog(newShader, 512, NULL, infoLog);
+        std::cout << "Shader failed to compile successfully" << std::endl << infoLog << std::endl; 
+    }
+    else
+    {
+        std::cout << "Successfully compiled shader \"" << shaderName << "\"." << std::endl;
+    }
     // Clean up mem alloc to rawData C string
-    delete rawData[];
+    delete [] rawData;
 
     return newShader;
 
