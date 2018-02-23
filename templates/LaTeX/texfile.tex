@@ -1,0 +1,422 @@
+\documentclass[12pt,notitlepage]{article}
+
+\usepackage[margin=2.54cm]{geometry} 
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+
+\graphicspath{{./images/}}
+
+\newcommand{\question}{\section*}
+
+\begin{document}
+
+\title{Intelligent Systems Exam} \author{Julius Stopforth \\ STPJUL004}
+\maketitle
+
+\section*{Section A}
+\question{Question 1}
+
+We apply Bayes Rule to calculate the probability of having heart disease (H)
+given that the initial test is true (T): $$P(H|T) = \frac{P(H)*P(T|H)}{P(T)}$$
+
+We take the prior probability of having heart disease as the long-term
+chance of someone having heart disease: $P(H) = 0.01$.
+
+Next, we take the true positive rate of the test as the probability for someone
+who registers true on the test and has heart disease: $P(T|H) = 0.9$
+
+Finally, we calculate the total probability of someone testing positive as the
+probability of having heart disease and correctly testing positive plus the
+probability of not having the disease and testing positive
+($P(\neg(H))*P(T|\neg(H)$) as:
+
+\begin{align*}
+ P(T) &= P(H)*P(T|H) + P(\neg(H))*P(T|\neg(H)) \\
+ &= 0.01*0.9 + 0.99*0.1 \\
+ &= 0.108
+\end{align*}
+
+Now we apply Bayes Rule and get:
+
+    $$P(H|T) = \frac{0.01*0.9}{0.108} = 0.08\overline{3} $$
+
+
+Therefore, if a patient has tested positive for heart disease there is a 8.3\%
+probability that they have heart disease.
+
+\pagebreak
+
+\question{Question 2}
+
+\subsection*{Question 2.1}
+
+See \texttt{defaulters.dne}
+
+\subsection*{Question 2.2}
+
+\begin{table*}[h]
+\centering
+\caption{Conditional probability table for default node}
+\label{my-label}
+\begin{tabular}{lc|cc}
+\hline
+\textbf{Sex} & \multicolumn{1}{l}{\textbf{Age}} &
+    \multicolumn{1}{l}{\textbf{True (\%)}} & \multicolumn{1}{l}{\textbf{False
+    (\%)}} \\ \hline
+male         & young                            & 5                                 & 95                                 \\ \hline
+male         & old                              & 3                                 & 97                                 \\ \hline
+female       & young                            & 2                                 & 98                                 \\ \hline
+female       & old                              & 3                                 & 97                                 \\ \hline
+\end{tabular}
+\end{table*}
+
+\fbox{\includegraphics{defaulters_compiled.pdf}}
+
+
+\subsection*{Question 2.3}
+
+In order to calculate the probability that someone will be young and defaulting
+we calculate the combined probability of both male and female patients being
+young and defaulting.
+
+We take the probability that a patient is male
+($P(\textnormal{male})$) from the priors and then the probability
+of the male patient being young and defaulting
+($P(\textnormal{young},
+\textnormal{defaulter})$). We do the same for a female patient
+which means we get:
+
+\begin{align*}
+    P(\textnormal{young},\textnormal{defaulter}) &= 
+    P(\textnormal{male})*P(\textnormal{young}, \textnormal{defaulter},
+    \textnormal{male}) \\ 
+    & + P(\textnormal{female})*P(\textnormal{young},\textnormal{defaulter}) \\
+    &= 0.55*0.05 + 0.45*0.2 \\
+    &= 0.0365
+\end{align*}
+
+This was checked against the output given in Netica by observing only that the
+patient is young and checking what the probability was that they are a
+defaulter.
+
+\question{Question 3}
+
+\subsection*{Question 3.1}
+
+The arcs $A^0 \to X^1$ and $X^0 \to X^1$ can be used to represent
+temporal links between timesteps 0 and 1.
+
+For $A^0 \to X^1$ the link can represent that taking an action $A^0$ will have
+an effect on a future state of $X$ in $X^1$. However, the current state of $X$
+in $X^0$ also influences the future state of $X^1$ and so there is also a
+temporal link $X^0 \to X^1$.
+
+The fact that no links exist across a timestep to the observations
+($\textnormal{Obs}^0$ and $\textnormal{Obs}^1$) means that they are solely
+dependant on the $X$ from that timestep.
+
+This can be used for prediction by observing $A^0$ and $X^0$ and then
+calculating the posterior probability of $X^1$ being observed. Once the
+posterior probability for $X^1$ is known, the observation $\textnormal{Obs}^1$
+can be predicted.
+
+\subsection*{Question 3.2}
+
+\fbox{\includegraphics[height=8cm]{q3-2_dbn.pdf}}
+
+\subsection*{Question 3.3}
+
+Inputs:
+
+\begin{itemize}
+    \item $A^1$: Eat junk food
+    \item $X^1$: No diabetes
+\end{itemize}
+
+Outputs:
+
+\begin{itemize}
+    \item $A^2$: Eat healthy food
+    \item $X^2$: Diabetes
+    \item $\textnormal{Obs}^2$: Test positive for diabetes
+\end{itemize}
+
+\subsection*{Question 3.4}
+
+The Markhov property in DBNs is related to the timesteps and states that the DBN
+in the current timestep only requires the information from the previous timestep
+as all the historical information is captured in it.
+
+\question{Question 4}
+
+\subsection*{Question 4.1}
+
+See \texttt{anxiety.dne}. Assumptions made:
+\begin{itemize}
+    \item The timestep 0 is right when the person either takes a pill or chooses
+        not to. Timestep 1 is five minutes later when the pill will have taken
+        effect.
+    \item An anxious person will remain anxious unless the pill takes effect.
+    \item A person will not start or stop working between timesteps.
+    \item A person will not change drowsiness unless the pill takes effect.
+    \item Both work and anxiety level are used when deciding to take a pill.
+\end{itemize}
+
+\fbox{\includegraphics[width=\textwidth]{anxiety_layout.pdf}}
+
+\subsection*{Question 4.2}
+
+\fbox{\includegraphics[width=\textwidth]{q4-2_utility.pdf}}
+
+\section*{Section B}
+\question{Question 5}
+
+Since the transition function for an MDP is written as the probability of reaching a state $s'$ after taking an action $a$ in state $s$ in the form:
+
+$$T(s,a,s') = P(s' | s, a)$$
+
+We specify the entire transition function in the following table for all
+possible states ($s1$, $s2$, $s3$) and actions ($a1$,$a2$) below. The table is
+formatted as starting state and action pairs.
+
+\begin{table}[h]
+\centering
+\caption{Transition probabilities for given starting state and action}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|}
+\cline{1-4}
+    \textbf{State, action\textbackslash End state} & s1   & s2   & s3   \\ \hline
+\multicolumn{1}{|l|}{(s1, a1)} & 0.33 & 0.33 & 0.33 \\ \hline
+\multicolumn{1}{|l|}{(s2, a1)} & 0.33 & 0.33 & 0.33 \\ \hline
+\multicolumn{1}{|l|}{(s3, a1)} & 0.33 & 0.33 & 0.33 \\ \hline
+\multicolumn{1}{|l|}{(s1, a2)} & 0.35 & 0.35 & 0.30 \\ \hline
+\multicolumn{1}{|l|}{(s2, a2)} & 0.50 & 0.20 & 0.30 \\ \hline
+\multicolumn{1}{|l|}{(s3, a2)} & 0.35 & 0.35 & 0.30 \\ \hline
+\end{tabular}
+\end{table}
+\question{Question 6}
+
+We are given the set of possible observations: $\Omega = \langle t,c,n\rangle$.
+We are also given two possible observation actions $a3$, and $a4$ that are
+imperfect with 80\% and 70\% success respectively.
+
+Therefore, we can specify an observation function $O(z,a,s)$ where $z \in
+\Omega$, $a \in A$, and $s \in S$. It is assumed that for actions a1 and a2 the
+observations will always result in $n$ regardless of the state.
+
+\begin{table}[h]
+\centering
+\caption{Probabilities of observing a table or chair in a given state}
+\label{my-label}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{State, action \textbackslash Observation} & \multicolumn{1}{l|}{\textbf{t}} & \multicolumn{1}{l|}{\textbf{c}} & \multicolumn{1}{l|}{\textbf{n}} \\ \hline
+(s1, a3)                                          & 0.80                            & 0.00                            & 0.20                            \\ \hline
+(s2, a3)                                          & 0.80                            & 0.00                            & 0.20                            \\ \hline
+(s3, a3)                                          & 0.00                            & 0.00                            & 1.00                            \\ \hline
+(s1, a4)                                          & 0.00                            & 0.00                            & 1.00                            \\ \hline
+(s2, a4)                                          & \multicolumn{1}{l|}{0.00}       & \multicolumn{1}{l|}{0.70}       & \multicolumn{1}{l|}{0.30}       \\ \hline
+(s3, a4)                                          & \multicolumn{1}{l|}{0.00}       & \multicolumn{1}{l|}{0.70}       & \multicolumn{1}{l|}{0.30}       \\ \hline
+\end{tabular}
+\end{table}
+
+\pagebreak
+
+\question{Question 7}
+
+The expected reward for an agent in the given belief state $b$ executing $a3$ is
+given by:
+
+$$\rho(a3,b) = \sum_{s \in S} R(a3,s)b(s) $$
+
+The reward function is:
+
+\begin{align*}
+R(a3,s) = \begin{cases}
+                10 & s = s1 \\
+                0 & s = s2 \\
+                -10 & s = s3
+                \end{cases} 
+\end{align*}
+
+The expected reward is therefore:
+
+\begin{align*}    
+    \rho(a3,b) &= R(a3,s1)*b(s1) + R(a3,s2)*b(s2) + R(a3,s3)*b(s3)\\
+    &= 10*0.2 + 0*0.3 + -10*0.5 \\
+    &= -3
+\end{align*}
+
+\question{Question 8}
+
+Intentions represent a set of planned actions or policy a BDI agent needs to execute in order to
+satisfy a desire (or goal). The BDI agent's focus function is used to select
+which intentions the agent is currently executing by evaluating the agent's
+desires and the ability for the agent to satisfy those desires with a given
+intention. Therefore, intentions are used in order to decide on a policy or plan
+that will satisfy the agent's desires. 
+
+\question{Question 9}
+
+The reconsideration function is used to determine when the agent should
+re-evaluate it's intention by calling the focus function. The function may take
+into account whether or not an intention is still achievable or satisfying
+enough.
+
+\pagebreak
+
+\section*{Section C}
+\question{Question 10}
+
+It is assumed that the sample given is representative of the true signal across
+the dataset.
+
+\begin{table}[h]
+\centering
+\caption{Completed table for Question 10}
+\label{my-label}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Technique \textbackslash Noise} & \multicolumn{1}{l|}{\textbf{\textless1\%}} & \multicolumn{1}{l|}{\textbf{1\% \textless x \textless 7\%}} & \multicolumn{1}{l|}{\textbf{\textgreater 7\%}} \\ \hline
+Degree 3 polynomial regression          & neither                                    & underfit                                                    & underfit                                       \\ \hline
+Linear regression                       & underfit                                   & underfit                                                    & underfit                                       \\ \hline
+Degree 5 polynomial regression          & neither                                    & overfit                                                     & overfit                                        \\ \hline
+Random Forests                          & neither
+    & overfit                                                     & overfit                                       \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{description}
+
+    \item[Linear regression:] Linear regressing will underfit the given data
+        regardless of the amount of noise, due to the true data signal being
+        complex.
+
+    \item[Degree 3 polynomial:] A polynomial of degree 3 will probably be able to
+        fit relatively well for very little noise, but will start to underfit as
+        the noise increases because it will start to average more between noisy
+        samples. This is because the change in y is typically gradual meaning
+        the smooth curve of the polynomial is an accurate representation.
+
+    \item[Degree 5 polynomial:] A polynomial of degree 5 will be able to fit
+        much more accurately that a degree 3 polynomial. However, it is
+        susceptible to overfitting on the noisy data and not accurately modeling
+        the true signal.
+
+    \item[Random Forests:] For this it was assumed that the Random Forest (RF) had a
+        high number of trees ($> 500$) for each case of noise. Therefore, the RF
+        is expected to correctly fit on very little noise because the RF will be able
+        to get very close to the true signal. However, with lots of noise, the
+        RF will not fit very closely to the true signal, but rather the noisy
+        signal. This is because the RF does not produce a smooth curve, but
+        rather a rougher or more jagged curve.
+
+\end{description}
+
+\question{Question 11}
+
+Over the entire test set the accuracy for system was 72.7\%.
+
+The SVM is much better at predicting the high-spend customers than
+it is at predicting medium or low-spend customers. The accuracy of the SVM when
+predicting high-spend customers is 89.6\% and for low-spend customers was
+66.7\%. However for medium customers the accuracy was only 63.2\%.
+
+From this information I would say that the SVM is capable of accurately
+determining a customers spending category with reasonable accuracy.
+
+A weakness of this system is that it requires fully labeled data for each
+customer, which may not always be available in a real-world application. 
+
+Another weakness of the system is that it is attempting to classify the
+customers into three categories whereas it may be more suited to binary
+classification.
+
+Furthermore, it is possible that some personal details may cause a greater
+fluctuation between spending brackets that could be seen as ``noise''. An
+example is that marital status is taken into account, but if it is assumed that
+married customers have children or do not, it could drastically change their
+spending bracket. 
+
+A better system could be to use a binary classification where Woolworths
+attempts to classify customers into high spenders ($> 10 000$) or normal spenders
+($< 10 000$) or maybe adding information regarding households as opposed to
+individual customers.
+
+\section*{Section D}
+\question{Question 12}
+
+\subsection*{Data availability and data requirements}
+
+\begin{description}
+
+    \item[Bayesian networks] Noisy data is acceptable. Small amounts of data are
+        also acceptable. However, network parameters such as priors must either be given
+        explicitly or learned from data.
+
+    \item[Supervised machine learning] Labeled, relatively clean, low-noise data
+        is required. More data is better as small amounts of training data may
+        not produce an accurate model.
+
+    \item[Clustering] Unlabeled data is acceptable.
+
+\end{description}
+
+\subsection*{Availability and access to expert knowledge}
+
+\begin{description}
+
+    \item[Bayesian networks] Depending on the domain accessing expert knowledge
+        may be difficult. However, using available expert knowledge is a
+        requirement for Bayesian Networks.
+
+    \item[Supervised machine learning] Expert knowledge required when labeling
+        data, but not necessary when training or evaluating model.
+
+    \item[Clustering] No true expert knowledge is required, although may be
+        useful when evaluating model or interpreting results.
+
+\end{description}
+
+
+\subsection*{Model validation and testing}
+
+\begin{description}
+
+    \item[Bayesian networks] An expert may be consulted with in order to
+        validate a given Bayesian network model. A Bayesian network may also be
+        evaluated using a set of test cases and a utility node.
+
+    \item[Supervised machine learning] Measuring performance on test sets can be
+        used to evaluate the model and k-fold cross validation can be applied.
+
+    \item[Clustering] Quality and purity can be applied for model evaluation.
+        Expert knowledge may be used in model validation.
+
+\end{description}
+
+
+\subsection*{Limitation and usability in real world applications}
+
+\begin{description}
+
+    \item[Bayesian networks] Effective in noisy applications where expert
+        knowledge may be captured and used. Limited where full understanding of
+        domain does not exist or experts are unavailable.
+
+    \item[Supervised machine learning] Reliance on large amounts of labelled data means
+        applications may be limited where little to no data exists. Low-noise
+        applications are preferred.
+
+    \item[Clustering] Applicable to unlabeled datasets, but reliant on large
+        datasets for good results. Applying clustering requires some
+        understanding in the domain to interpret results. 
+
+\end{description}
+
+
+%\bibliographystyle{plain}
+%\bibliography{refs}
+
+\end{document}
