@@ -7,8 +7,11 @@
 // 0 means empty 1 means alive
 byte[][] grid;
 
-color backgroundColor = #39d4f2;
-color foregroundColor = #03c03c;
+//color backgroundColor = #39d4f2;
+//color foregroundColor = #03c03c;
+
+color backgroundColor = #000000;
+color foregroundColor = #ffffff;
 
 int numcols, numrows;
 int population;
@@ -19,6 +22,8 @@ void setup ()
 {
   frameRate(30);
   size(600,600);
+  
+
   
   //noLoop();
   noStroke();
@@ -56,13 +61,14 @@ void setup ()
 
 void draw()
 {
+  //delay(50);
   background(backgroundColor);
   if (!paused)
   {
     grid = update_grid(grid);
   }
   draw_grid(grid);
-  println("Population: ", population);
+  //println("Population: ", population);
   
   if (mousePressed)
   {
