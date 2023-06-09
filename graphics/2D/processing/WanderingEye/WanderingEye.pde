@@ -1,16 +1,23 @@
+// Masking eye irises
+// see: https://mathworld.wolfram.com/Circle-CircleIntersection.html
+// use arcs then
 
 
+boolean isDebug = false;
+boolean staring = false;
 
-
-
+ArrayList<Eye> eyes;
 
 void setup() {
 
   size(640, 480);
-  background(#e3e3e3);
+  background(#e1e1e1);
   fill(#ff0000);
   stroke(#00ff00);
   strokeWeight(3);
+
+  eyes = new ArrayList<>();
+
 }
 
 void drawCross(float x, float y, float r) {
@@ -19,55 +26,115 @@ void drawCross(float x, float y, float r) {
 }
 
 void draw() {
-  
-  PVector origin = new PVector(width/2, height/2);
-  PVector mouse = new PVector(mouseX, mouseY);
-  
   background(#e3e3e3);
-  fill(#ff0000);
-  stroke(#00ff00);
-  strokeWeight(3);
-
-  //draw the bounding circle for the iris
-  stroke(#ffffff);
-  fill(#ff0000);
-  ellipse(origin.x, origin.y, 150, 100);
-
-  //draw the iris/pupil at center coordinates
-  //ellipse(origin.x, origin.y, 50, 50);
-
-  stroke(#000000);
-  //line(origin.x, origin.y, mouse.x, mouse.y);
-
-  //stroke(#ffffff);
-  // draw crosshairs
-  //drawCross( origin.x, origin.y, 5);
-  drawCross(mouse.x, mouse.y, 5);
-
-  //debug text
-  fill(#ffffff);
-  noStroke();
-  rect(mouse.x+2, mouse.y-2, 102, -38);
-
-  fill(#ff0000);
-  String info = String.format("distance: %.2f", origin.dist(mouse));
-  text(info, mouse.x+5, mouse.y-5,100,-36);
   
-  PVector vec = PVector.sub(mouse, origin);
-  vec.normalize();
-  
-  vec = vec.mult(25.0);
+  PVector mouse = new PVector(mouseX, mouseY);
 
-  vec.add(origin);
-   println(vec);
-  stroke(#00ff00);
-  strokeWeight(3);
+  for (Eye eye : eyes) {
+    eye.debug = isDebug;
+    if (staring) {
+      eye.stare();
+    } else {
+      eye.lookAt(mouse.x, mouse.y);
+    }
+    eye.show();
+  }
+}
 
-  drawCross(vec.x,vec.y,5);
-  noFill();
-  ellipse(vec.x,vec.y,50,50);
-  
-  
-  
 
+void keyPressed() {
+  switch (key) {
+
+  case 'd':
+    isDebug= !isDebug;
+    break;
+  case 's':
+    staring = !staring;
+    break;
+   case 'o':
+     for (Eye eye : eyes) {
+       eye.outline = !eye.outline;
+     }
+  }
+}
+
+void mouseClicked() {
+  eyes.add(new Eye(mouseX, mouseY,25));
+  //eyes.add(new Eye(mouseX, mouseY, (int)random(10,25)));
+}
+
+class Eye {
+
+  public PVector origin;
+  private PVector target;
+
+  public boolean debug = false;
+  public boolean outline = true;
+
+  public float irisSize = 10;
+
+  public color scleraColor = #ffffff;
+  public color irisColor = #000000;
+
+
+  public Eye(float x, float y, int irisSize) {
+    origin = new PVector(x, y);
+    this.irisSize = irisSize;
+  }
+
+  public void lookAt(float x, float y) {
+    target = new PVector(x, y);
+  }
+
+  public void stare() {
+    target = new PVector(this.origin.x, this.origin.y);
+  }
+  
+  public void show() {
+       
+    color outerColor = this.scleraColor;
+    color innerColor = this.irisColor;
+
+    if (this.debug) {
+      noFill();
+      stroke(#000000);
+      strokeWeight(2);
+    } else {
+      fill(outerColor);
+      if (outline) {
+        stroke(innerColor);
+      } else {
+        stroke(outerColor);
+      }
+      strokeWeight(3);
+    }
+
+    //draw the outer eye/sclera
+    ellipse(origin.x, origin.y, 3*irisSize, 2*irisSize);
+
+    PVector vec = PVector.sub(target, origin);
+    if (vec.mag() >= irisSize/2.0) {
+      vec.normalize();
+      vec = vec.mult(irisSize/2.0);
+    }
+    vec.add(origin);
+
+    // Draw the iris
+    if (!this.debug) {
+      fill(innerColor);
+      stroke(innerColor);
+    }
+    ellipse(vec.x, vec.y, irisSize, irisSize);
+
+    // add crosses and lines
+    if (this.debug) {
+      ellipse(origin.x, origin.y, irisSize, irisSize);
+      drawCross(origin.x, origin.y, 5);
+      drawCross(target.x, target.y, 5);
+      drawCross(vec.x, vec.y, 5);
+      line(origin.x, origin.y, target.x, target.y);
+    }
+  }
+  
+  
 }
